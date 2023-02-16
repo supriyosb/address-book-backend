@@ -19,36 +19,53 @@ public class PhoneBookService {
             new PhoneBook(++phoneBookId, "Book2", new ArrayList<>())
     ));
 
+    /**
+     * Method to return list of phone books
+     * @return
+     */
     public List<PhoneBook> getPhoneBookList(){
         return phoneBookList;
     }
 
+    /**
+     * Method to return a single phone book object by phone book id
+     * @param id
+     * @return
+     */
     public PhoneBook getPhoneBook(int id){
-    	/*PhoneBook phoneBook = null;
-    	try {
-    		phoneBook =  phoneBookList.stream().filter(t -> t.getId()==id).findFirst().get();
-    	} catch (NoSuchElementException ex) {
-    		throw new ResourceNotFoundException("Phone book not found with id: " + id);
-    	}
-        return phoneBook;*/
         return phoneBookList.stream().filter(t -> t.getId()==id).findFirst().get();
     }
 
+    /**
+     * Method to return  phone book object by phone book name
+     * @param bookName
+     * @return
+     */
     public PhoneBook getPhoneBookByBookName(String bookName){
         return phoneBookList.stream().filter(t -> t.getBookName().equalsIgnoreCase(bookName)).findFirst().get();
     }
 
+    /**
+     * Method to add person name and phone number into a phone book
+     * @param phoneBook
+     * @param personDetails
+     * @return
+     */
     public PersonDetails addPersonDetails(PhoneBook phoneBook, PersonDetails personDetails){
         personDetails.setId(+personDetailsId);
         phoneBook.getPersonDetailsList().add(personDetails);
         return personDetails;
     }
 
+    /**
+     * Method to compare two phone book and provide a list of uncommon person details inside those two phone book
+     * @param phoneBookFirst
+     * @param phoneBookSecond
+     * @return
+     */
     public List<PersonDetails> fetchUniquePersonFromTwoPhoneBook(PhoneBook phoneBookFirst, PhoneBook phoneBookSecond){
         List<PersonDetails> bookFirstPersonList = phoneBookFirst.getPersonDetailsList();
         List<PersonDetails> bookSecondPersonList = phoneBookSecond.getPersonDetailsList();
-        System.out.println("+++++++++++" + bookFirstPersonList);
-        System.out.println("+++++++++++" + bookSecondPersonList);
         List<PersonDetails> listOne = new ArrayList<>(bookFirstPersonList);
         List<PersonDetails> listTwo = new ArrayList<>(bookSecondPersonList);
 
@@ -56,19 +73,18 @@ public class PhoneBookService {
                 .filter(second -> listTwo.stream()
                         .anyMatch(first -> first.getPersonName().equals(second.getPersonName())
                         )).collect(Collectors.toList());
-        System.out.println("========="+list);
 
         for(PersonDetails personDetails : list){
             PersonDetails p = listOne.stream().filter(t -> t.getPersonName().equals(personDetails.getPersonName())).findFirst().get();
             listOne.remove(p);
         }
-        System.out.println("*********"+listOne);
         for(PersonDetails personDetails : list){
             PersonDetails p = listTwo.stream().filter(t -> t.getPersonName().equals(personDetails.getPersonName())).findFirst().get();
             listTwo.remove(p);
         }
-        System.out.println("*********"+listTwo);
         listOne.addAll(listTwo);
+        Comparator<PersonDetails> comparator = Comparator.comparing(PersonDetails::getPersonName);
+        listOne.sort(comparator);
         return listOne;
     }
 }

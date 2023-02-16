@@ -18,6 +18,8 @@ public class PersonDetails {
     @Pattern(regexp = "^(\\+\\d{1,2}\\s?)?1?\\-?\\.?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message = "Not a valid phone number")
     private String phoneNumber;
 
+    private String bookName;
+
     public PersonDetails(int id, String personName, String phoneNumber) {
         this.id = id;
         this.personName = personName;
@@ -46,6 +48,14 @@ public class PersonDetails {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     @Override
