@@ -12,6 +12,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class PersonController {
 
     @Autowired
@@ -23,6 +24,7 @@ public class PersonController {
         try {
         	phoneBook = phoneBookService.getPhoneBook(Integer.valueOf(id));
             personDetails.setId(++PhoneBookService.personDetailsId);
+            personDetails.setBookName(phoneBook.getBookName());
             phoneBookService.addPersonDetails(phoneBook, personDetails);
         } catch (Exception e) {
         	throw new ResourceNotFoundException("Phone book not found with id: " + id);
